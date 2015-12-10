@@ -9,10 +9,10 @@ public class BoardListActionFactory extends ActionFactory {
 	public Action getAction(String actionName){
 		Action action = null;
 		
-		if("delete".equals(actionName)){
-		//	action = new DeleteAction();
+		if("write".equals(actionName)){
+			action = new WriteAction();
 		}else if("insert".equals(actionName)){//완료
-		//	action = new InsertAction();
+			action = new InsertAction();
 		}else if("del".equals(actionName)){
 		//	action = new DelAction();
 		}else{

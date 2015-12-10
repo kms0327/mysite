@@ -12,13 +12,12 @@ import com.hanains.http.action.Action;
 import com.hanains.mysite.dao.GuestBookDao;
 import com.hanains.mysite.vo.GuestBookVo;
 
-public class IndexAction implements Action {
+public class WriteAction implements Action {
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
 		//forwarding
-		HttpUtil.forwarding(request, response, "/WEB-INF/views/board/list.jsp");
+		HttpUtil.forwarding(request, response, "/WEB-INF/views/board/write.jsp");
 	}
 
 }

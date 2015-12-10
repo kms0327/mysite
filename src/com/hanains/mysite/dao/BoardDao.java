@@ -9,10 +9,10 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.hanains.mysite.vo.BoardVo;
 import com.hanains.mysite.vo.GuestBookVo;
 
-public class GuestBookDao {
-	
+public class BoardDao {
 	private Connection getConnection(){
 		Connection connection = null;
 		
@@ -30,6 +30,7 @@ public class GuestBookDao {
 		}
 		return connection;
 	}
+	
 	public List<GuestBookVo> getList(){
 		List<GuestBookVo> list = new ArrayList<GuestBookVo>();
 		Connection connection = null;
@@ -41,21 +42,23 @@ public class GuestBookDao {
 			//3.statement make
 			stmt = connection.createStatement();
 			//4.sql execute
-			String sql="select no,name,password,message,reg_date from guestbook ORDER BY no desc";
+			String sql="select * from board ORDER BY no desc";
 			rs = stmt.executeQuery(sql);
 			//5.result get
 			while(rs.next()){
 				Long no = rs.getLong(1);
-				String name = rs.getString(2);
-				String password = rs.getString(3);
-				String message = rs.getString(4);
-				String date = rs.getString(5);
+				String title = rs.getString(2);
+				String content = rs.getString(3);
+				String member_no = rs.getString(4);
+				String view_cnt = rs.getString(5);
+				String date = rs.getString(6);
 				
 				GuestBookVo vo = new GuestBookVo();
 				vo.setNo(no);
-				vo.setName(name);
-				vo.setPassword(password);
-				vo.setMessage(message);
+				vo.setName(title);
+				vo.setPassword(content);
+				vo.setMessage(member_no);
+				vo.setDate(view_cnt);
 				vo.setDate(date);
 				
 				list.add(vo);
@@ -74,18 +77,19 @@ public class GuestBookDao {
 		return list;
 	}
 	
-	public void insert(GuestBookVo vo){
+	public void insert(BoardVo vo){
 		Connection connection = null;
 		PreparedStatement pstmt = null;
 		try{
 			connection = getConnection();
 			
-			String sql = "insert into guestbook values(GUESTBOOK_SEQ.nextval,?,?,?,SYSDATE)";
+			String sql = "insert into board values(board_no_seq.nextval,?,?,?,?,SYSDATE)";
 			pstmt = connection.prepareStatement(sql);
 			
-			pstmt.setString(1, vo.getName());
-			pstmt.setString(2, vo.getPassword());
-			pstmt.setString(3, vo.getMessage());
+			pstmt.setString(1, vo.getTitle());
+			pstmt.setString(2, vo.getContent());
+			pstmt.setString(3, vo.getMemberNo());
+			pstmt.setString(4, "1");
 			
 			pstmt.executeUpdate();
 		}catch(SQLException e){

@@ -1,11 +1,11 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
-<%@ page import="com.hanains.mysite.dao.GuestBookDao" %>
-<%@ page import="com.hanains.mysite.vo.GuestBookVo" %>
-<%@ page import="java.util.List" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%> 
+
 <% 
-	GuestBookDao dao = new GuestBookDao();
-	List<GuestBookVo> list = dao.getList();
-%>
+	pageContext.setAttribute("enter","\n"); 
+%> 
 <!doctype html>
 <html>
 <head>
@@ -35,38 +35,37 @@
 				</form>
 				
 				<ul>
-					<%
-						int countTotal = list.size();
-						int index = 0;
-						for(GuestBookVo vo : list)	{
-					%>
+				<c:set var="count" value="${fn:length(list) }"/>
+				<c:forEach items="${list}" var="vo" varStatus="status">
 					<li>
 					<form action="/mysite/gs" method="post">
 						<table>
 							<tr>
-								<td><%=countTotal-index++ %></td>
-								<td><%=vo.getName() %></td>
-								<td><%=vo.getDate() %></td>
+								<td>${count-status.index }</td>
+								<td>${vo.name }</td>
+								<td>${vo.date }</td>
 								<td><input type="submit" value="삭제"></td>
 							</tr>
 							<tr>
-								<td colspan=4><%=vo.getMessage() %><br></td>
+								<td colspan=4>${fn:replace(vo.message,enter,'<br/>') }<br></td>
 							</tr>
 						</table>
 						<input type="hidden" name="a" value="delete">
-						<input type='hidden' name="no" value="<%=vo.getNo() %>"> 
-						<input type='hidden' name="pwd" value="<%=vo.getPassword() %>">
+						<input type='hidden' name="no" value=${vo.no }> 
+						<input type='hidden' name="pwd" value=${vo.password }>
 						<br>
 						</form>
 					</li>
-					<%
-						}
-					%>
+				</c:forEach>
 				</ul>
 			</div>
 		</div>
-		<jsp:include page="/WEB-INF/views/includes/navigation.jsp"></jsp:include>
-		<jsp:include page="/WEB-INF/views/includes/footer.jsp"></jsp:include>
+		<c:import url="/WEB-INF/views/includes/navigation.jsp">
+			<c:param name="menu" value="guest"/>
+		</c:import>
+		
+		<c:import url="/WEB-INF/views/includes/footer.jsp"/>
+		
 	</div>
 </body>
 </html>
